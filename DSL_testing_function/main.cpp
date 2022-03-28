@@ -31,12 +31,13 @@ int main(int argc, char* argv[])
     SDL_Window* window;
     SDL_Renderer* renderer;
     initSDL(window, renderer);
-    SDL_rect object;
+    SDL_Texture* pacman = loadTexture("sus.png", renderer);
+    SDL_Rect player;
+    player.x = 0;
+    player.y = 0;
+    player.w = 60;
+    player.h = 60;
 
-
-    SDL_Texture* pacman = loadTexture("pacman.gif", renderer);
-    SDL_RenderCopy(renderer, pacman, 0, 0);
-    SDL_RenderPresent(renderer);
 
     SDL_Event e;
     while (true) {
@@ -44,7 +45,17 @@ int main(int argc, char* argv[])
         else if(e.type == SDL_QUIT){break;}
         else if(e.type == SDL_KEYDOWN){
             cout << "_" << SDL_GetKeyName(e.key.keysym.sym) << "_" << endl;
+            switch(e.key.keysym.sym){
+                case SDLK_w: player.y-=10; break;
+                case SDLK_a: player.x-=10; break;
+                case SDLK_s: player.y+=10; break;
+                case SDLK_d: player.x+=10; break;
+            }
         }
+        SDL_RenderClear(renderer);
+        SDL_RenderCopy(renderer, pacman, NULL, &player);
+        SDL_RenderPresent(renderer);
+
     }
 
     quitSDL(window, renderer);
