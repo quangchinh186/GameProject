@@ -21,6 +21,16 @@ void logSDLError(std::ostream& os,
         exit(1);
     }
 }
+const int v = 5;
+int x_step[5] = {0, 0, 1, 0, -1};
+int y_step[5] = {0, -1, 0, 1, 0};
+
+void run(int &x, int &y, int direct){
+    x+= x_step[direct] * v;
+    y+= y_step[direct] * v;
+}
+
+string pacman_status[3] = {"resources/head_right_pacman_open.png", "resources/head_right_pacman_half.png", "resources/pacman_full.png"};
 
 void quitSDL(SDL_Window* window, SDL_Renderer* renderer);
 void initSDL(SDL_Window* &window, SDL_Renderer* &renderer);
@@ -31,32 +41,83 @@ int main(int argc, char* argv[])
     SDL_Window* window;
     SDL_Renderer* renderer;
     initSDL(window, renderer);
-    SDL_Texture* pacman = loadTexture("sus.png", renderer);
-    SDL_Rect player;
-    player.x = 0;
-    player.y = 0;
-    player.w = 60;
-    player.h = 60;
+    SDL_Rect object;
+    object.x = 0; object.y = 0; object.h = 40; object.w = 40;
 
 
+    SDL_Texture* pacman = loadTexture(pacman_status[0], renderer);
+    SDL_RenderCopy(renderer, pacman, 0, &object);
+    SDL_RenderPresent(renderer);
+    int idle, direction = 2;
     SDL_Event e;
+    SDL_RendererFlip flip = SDL_FLIP_NONE;
+    double angle = 0;
     while (true) {
-        if ( SDL_WaitEvent(&e) == 0){SDL_Delay(100);}
+        idle = (SDL_GetTicks()/100 )% 3;
+        pacman = loadTexture(pacman_status[idle], renderer);
+
+        if(SDL_PollEvent(&e) == 0){}
         else if(e.type == SDL_QUIT){break;}
         else if(e.type == SDL_KEYDOWN){
-            cout << "_" << SDL_GetKeyName(e.key.keysym.sym) << "_" << endl;
+            cout << SDL_GetKeyName(e.key.keysym.sym) << " " << angle << endl;
             switch(e.key.keysym.sym){
-                case SDLK_w: player.y-=10; break;
-                case SDLK_a: player.x-=10; break;
-                case SDLK_s: player.y+=10; break;
-                case SDLK_d: player.x+=10; break;
+                case SDLK_w:
+                    if(direction == 3){
+                        angle+=180;
+                    }else if(direction == 2){
+                        angle += 270;
+                    }
+                    else if(direction == 4){
+                        angle += 90;
+                    }
+                    direction = 1;
+                    break;
+                    /////////
+                case SDLK_a:
+                    if(direction == 2){
+                        angle += 180;
+                    }else if(direction == 3){
+                        angle += 90;
+                    }
+                    else if(direction == 1){
+                        angle += 270;
+                    }
+                    direction = 4;
+                    break;
+                    /////////////
+                case SDLK_s:
+                    if(direction == 1){
+                        angle+=180;
+                    }else if(direction == 2){
+                        angle += 90;
+                    }
+                    else if(direction == 4){
+                        angle += 270;
+                    }
+                    direction = 3;
+                    break;
+                    ///////////
+                case SDLK_d:
+                    if(direction == 4){
+                        angle+=180;
+                    }else if(direction == 1){
+                        angle += 90;
+                    }
+                    else if(direction == 3){
+                        angle += 270;
+                    }
+                    direction = 2;
+                    break;
             }
         }
-        SDL_RenderClear(renderer);
-        SDL_RenderCopy(renderer, pacman, NULL, &player);
-        SDL_RenderPresent(renderer);
+        run(object.x, object.y, direction);
 
+        SDL_RenderClear(renderer);
+        SDL_RenderCopyEx(renderer, pacman, NULL, &object, angle, NULL, flip);
+        SDL_RenderPresent(renderer);
+        if(angle > 360)angle -= 360;
     }
+
 
     quitSDL(window, renderer);
     return 0;
