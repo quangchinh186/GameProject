@@ -1,5 +1,0 @@
-# depslib dependency file v1.0
-1645191412 source:f:\c-c++\dsl2\main.cpp
-	<iostream>
-	<SDL.h>
-

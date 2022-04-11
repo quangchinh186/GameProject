@@ -1,0 +1,42 @@
+# depslib dependency file v1.0
+1649678242 source:f:\c-c++\frombegin\main.cpp
+	"game.h"
+
+1649219532 f:\c-c++\frombegin\game.h
+	"SDL.h"
+	<SDL_image.h>
+	<iostream>
+
+1649679096 source:f:\c-c++\frombegin\game.cpp
+	"game.h"
+	"load_image.h"
+	"player.h"
+	"map.h"
+
+1649169211 source:f:\c-c++\frombegin\pacman.cpp
+	"pacman.h"
+
+1649169209 f:\c-c++\frombegin\pacman.h
+	<iostream>
+
+1649219840 source:f:\c-c++\frombegin\load_image.cpp
+	"load_image.h"
+
+1649219840 f:\c-c++\frombegin\load_image.h
+	"game.h"
+
+1649679566 f:\c-c++\frombegin\player.h
+	"game.h"
+
+1649679718 source:f:\c-c++\frombegin\player.cpp
+	"player.h"
+	"load_image.h"
+	"map.h"
+
+1649671300 f:\c-c++\frombegin\map.h
+	"game.h"
+	"load_image.h"
+
+1649671300 source:f:\c-c++\frombegin\map.cpp
+	"map.h"
+
