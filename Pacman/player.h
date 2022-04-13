@@ -10,13 +10,13 @@ public:
     void action(int direct);
     void render();
     void ilde();
-    static bool check_colide(int x, int y);
-
-private:
+    void check_position();
     int xpos, ypos, frame;
+private:
+
     SDL_Texture* playerTex;
     SDL_Rect sR, dR;
-
+    bool colide = false;
 };
 
 

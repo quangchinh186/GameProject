@@ -34,6 +34,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 		isRunning = true;
 		pacman = new player("image/1.png", width/2, height/2, 3);
 		gamemap = new map;
+		gamemap->create_map();
 	}
 }
 
@@ -51,29 +52,37 @@ void Game::handleEvents()
         switch(e.key.keysym.sym){
             case SDLK_w:
             d = 0;
+            //pacman->action(d);
             break;
 
             case SDLK_d:
             d = 1;
+            //pacman->action(d);
             break;
 
             case SDLK_s:
             d = 2;
+            //pacman->action(d);
             break;
 
             case SDLK_a:
             d = 3;
+            //pacman->action(d);
             break;
 
             default:
             break;
             }
     }
+
 }
 
 void Game::update()
 {
+
     pacman->action(d);
+    gamemap->update_map(pacman->xpos, pacman->ypos);
+
 }
 
 void Game::render()
