@@ -3,6 +3,7 @@
 #include "player.h"
 #include "map.h"
 
+
 player* pacman;
 SDL_Renderer* Game::renderer = nullptr;
 map* gamemap;
@@ -32,13 +33,13 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 		}
 
 		isRunning = true;
-		pacman = new player("image/1.png", width/2, height/2, 3);
+		pacman = new player("image/1.png", 560, 480, 3);
 		gamemap = new map;
 		gamemap->create_map();
 	}
 }
 
-int d = 3;
+int d = 0;
 
 void Game::handleEvents()
 {

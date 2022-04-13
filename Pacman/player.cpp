@@ -25,37 +25,38 @@ player::~player(){}
 void player::ilde(){
     sR.x = 600 / (SDL_GetTicks() % frame + 1);
 }
-/*
-void player::check_position(){
-    int row = dR.y / 40;
-    int col = dR.x / 40;
-
-    if(m[row][col] == 1){
-        colide = true;
-    }else{
-        colide = false;
-    }
-}*/
 
 int x_step[4] = {0, 1, 0, -1};
 int y_step[4] = {-1, 0, 1, 0};
 
 void player::action(int direct){
-        xpos = dR.x;
-        ypos = dR.y;
-        dR.x += 5 * x_step[direct];
-        dR.y += 5 * y_step[direct];
-        if(gm->moveable(dR.x, dR.y)){}
-        else{
-            dR.x = (xpos/40) *40;
-            dR.y = (ypos/40) *40;
-        }
+    xpos = dR.x;
+    ypos = dR.y;
+    dR.x += 5 * x_step[direct];
+    dR.y += 5 * y_step[direct];
+    int x = dR.x, y = dR.y, t;
+    if(dR.x > xpos){
+        x += 35;
+    }
+    if(dR.x == xpos){
+        t = dR.x % 40;
+        t >= (40-t) ? dR.x += (40-t) : dR.x -= t;
+    }
+    if(dR.y > ypos){
+        y += 35;
+    }
+    if(dR.y == ypos){
+        t = dR.y % 40;
+        t >= (40-t) ? dR.y += (40-t) : dR.y -= t;
+    }
 
+    if(gm->moveable(x, y)){}
+    else{
+        dR.x = xpos;
+        dR.y = ypos;
+    }
 
-
-        //SDL_Delay(50);
-
-    std::cout << xpos << " " << ypos << std::endl;
+    std::cout << dR.x << " " << dR.y << std::endl;
 }
 
 void player::render(){

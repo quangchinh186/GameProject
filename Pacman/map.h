@@ -19,6 +19,7 @@ private:
     SDL_Texture* blank;
     SDL_Texture* item;
     SDL_Texture* cherri;
+    SDL_Texture* gate;
     SDL_Rect destR, sorcR;
 };
 
