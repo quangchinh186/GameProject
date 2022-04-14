@@ -9,8 +9,8 @@ player::player(const char* filename, int x, int y, int f){
     playerTex = Texture::NewTexture(filename);
     sR.x = 0;
     sR.y = 0;
-    sR.h = 200;
-    sR.w = 200;
+    sR.h = 50;
+    sR.w = 50;
 
     dR.h = 40;
     dR.w = 40;
@@ -22,12 +22,19 @@ player::player(const char* filename, int x, int y, int f){
 }
 player::~player(){}
 
-void player::ilde(){
-    sR.x = 600 / (SDL_GetTicks() % frame + 1);
+
+void player::sprite(int direct){
+    if(sR.y < 150*direct || sR.y >= 150*(direct + 1)-50){
+        sR.y = 150 * direct;
+    }else{
+        sR.y += 50;
+    }
+
+
 }
 
-int x_step[4] = {0, 1, 0, -1};
-int y_step[4] = {-1, 0, 1, 0};
+int x_step[4] = {1, 0, -1, 0};
+int y_step[4] = {0, 1, 0, -1};
 
 void player::action(int direct){
     xpos = dR.x;

@@ -9,7 +9,7 @@ public:
     ~player();
     void action(int direct);
     void render();
-    void ilde();
+    void sprite(int direct);
     void check_position();
     int xpos, ypos, frame;
 private:

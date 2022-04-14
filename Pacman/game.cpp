@@ -7,6 +7,7 @@
 player* pacman;
 SDL_Renderer* Game::renderer = nullptr;
 map* gamemap;
+const int fps = 60;
 
 Game::Game()
 {}
@@ -33,7 +34,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 		}
 
 		isRunning = true;
-		pacman = new player("image/1.png", 560, 480, 3);
+		pacman = new player("image/pacman.png", 560, 480, 3);
 		gamemap = new map;
 		gamemap->create_map();
 	}
@@ -51,24 +52,20 @@ void Game::handleEvents()
     else if(e.type == SDL_KEYDOWN){
         std::cout << SDL_GetKeyName(e.key.keysym.sym) << std::endl;
         switch(e.key.keysym.sym){
-            case SDLK_w:
-            d = 0;
-            //pacman->action(d);
-            break;
-
             case SDLK_d:
-            d = 1;
-            //pacman->action(d);
+            d = 0;
             break;
 
             case SDLK_s:
-            d = 2;
-            //pacman->action(d);
+            d = 1;
             break;
 
             case SDLK_a:
+            d = 2;
+            break;
+
+            case SDLK_w:
             d = 3;
-            //pacman->action(d);
             break;
 
             default:
@@ -77,10 +74,15 @@ void Game::handleEvents()
     }
 
 }
+int change_frame = 0, speed = 6;
 
 void Game::update()
 {
-
+    change_frame++;
+    if(fps / change_frame == speed){
+        change_frame = 0;
+        pacman->sprite(d);
+    }
     pacman->action(d);
     gamemap->update_map(pacman->xpos, pacman->ypos);
 
@@ -88,6 +90,7 @@ void Game::update()
 
 void Game::render()
 {
+
 	SDL_RenderClear(renderer);
 	gamemap->loadmap();
 	pacman->render();
