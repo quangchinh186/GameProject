@@ -2,7 +2,7 @@
 #include "load_image.h"
 #include "map.h"
 
-map* gm;
+map* player_map;
 
 player::player(const char* filename, int x, int y, int f){
     frame = f;
@@ -17,8 +17,8 @@ player::player(const char* filename, int x, int y, int f){
     dR.x = x; xpos = x;
     dR.y = y; ypos = y;
 
-    gm = new map;
-    gm->create_map();
+    player_map = new map;
+    player_map->create_map();
 }
 player::~player(){}
 
@@ -57,7 +57,7 @@ void player::action(int direct){
         t >= (40-t) ? dR.y += (40-t) : dR.y -= t;
     }
 
-    if(gm->moveable(x, y)){}
+    if(player_map->moveable(x, y)){}
     else{
         dR.x = xpos;
         dR.y = ypos;

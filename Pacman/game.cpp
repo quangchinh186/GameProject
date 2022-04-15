@@ -2,6 +2,7 @@
 #include "load_image.h"
 #include "player.h"
 #include "map.h"
+#include "ghost.h"
 
 
 player* pacman;

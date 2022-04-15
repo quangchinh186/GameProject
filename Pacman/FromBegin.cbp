@@ -33,6 +33,8 @@
 		</Compiler>
 		<Unit filename="game.cpp" />
 		<Unit filename="game.h" />
+		<Unit filename="ghost.cpp" />
+		<Unit filename="ghost.h" />
 		<Unit filename="load_image.cpp" />
 		<Unit filename="load_image.h" />
 		<Unit filename="main.cpp" />

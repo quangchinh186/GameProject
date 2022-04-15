@@ -10,13 +10,12 @@ public:
     void action(int direct);
     void render();
     void sprite(int direct);
-    void check_position();
     int xpos, ypos, frame;
 private:
 
     SDL_Texture* playerTex;
     SDL_Rect sR, dR;
-    bool colide = false;
+
 };
 
 
