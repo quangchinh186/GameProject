@@ -11,6 +11,7 @@ public:
     void render();
     void sprite(int direct);
     int xpos, ypos, frame;
+    bool dead = false;
 private:
 
     SDL_Texture* playerTex;

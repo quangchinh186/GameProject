@@ -25,6 +25,12 @@ void map::create_map(){
 }
 
 bool map::moveable(int x, int y){
+    if(x % destR.w != 0){
+        x += (destR.w - (x % destR.w));
+    }
+    if(y % destR.h != 0){
+        y += (destR.h - (y % destR.h));
+    }
     int j = x / 40, i = y / 40;
 
     if(m[i][j] == 1 || m[i][j] == 4){
@@ -35,8 +41,13 @@ bool map::moveable(int x, int y){
 
 void map::update_map(int x, int y){
     int j = x/40, i = y/40;
-    if(m[i][j] == 2 or m[i][j] == 3){
+    if(m[i][j] == 2){
         m[i][j] = 0;
+    }
+    if(m[i][j] == 3){
+        m[i][j] = 0;
+        cherri_left--;
+        std::cout << cherri_left << std::endl;
     }
 
 }

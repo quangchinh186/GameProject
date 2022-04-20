@@ -20,6 +20,7 @@ public:
 	void render();
 	void clean();
 	static SDL_Renderer *renderer;
+	int cherri;
 
 private:
 	bool isRunning = false;

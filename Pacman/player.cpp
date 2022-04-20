@@ -24,37 +24,39 @@ player::~player(){}
 
 
 void player::sprite(int direct){
-    if(sR.y < 150*direct || sR.y >= 150*(direct + 1)-50){
-        sR.y = 150 * direct;
+    if(sR.y < sR.h*frame*direct || sR.y >= sR.h*frame*(direct + 1) - sR.h){
+        sR.y = sR.h * frame * direct;
     }else{
-        sR.y += 50;
+        sR.y += sR.h;
     }
-
-
 }
 
 int x_step[4] = {1, 0, -1, 0};
 int y_step[4] = {0, 1, 0, -1};
+int v = 5;
 
 void player::action(int direct){
     xpos = dR.x;
     ypos = dR.y;
-    dR.x += 5 * x_step[direct];
-    dR.y += 5 * y_step[direct];
+    dR.x += v * x_step[direct];
+    dR.y += v * y_step[direct];
     int x = dR.x, y = dR.y, t;
+    //di tien theo chieu duong cua Ox can cong them phan thieu de kiem tra tiep xuc voi wall
+    /*
     if(dR.x > xpos){
-        x += 35;
-    }
-    if(dR.x == xpos){
-        t = dR.x % 40;
-        t >= (40-t) ? dR.x += (40-t) : dR.x -= t;
+        x += (dR.w - v);
     }
     if(dR.y > ypos){
-        y += 35;
+        y += (dR.h - v);
+    }*/
+    //khi di chuyen thi se di dung theo rect cua map
+    if(dR.x == xpos){
+        t = dR.x % dR.w;
+        t >= (dR.w - t) ? dR.x += (dR.w - t) : dR.x -= t;
     }
     if(dR.y == ypos){
-        t = dR.y % 40;
-        t >= (40-t) ? dR.y += (40-t) : dR.y -= t;
+        t = dR.y % dR.h;
+        t >= (dR.h - t) ? dR.y += (dR.h - t) : dR.y -= t;
     }
 
     if(player_map->moveable(x, y)){}
@@ -62,8 +64,6 @@ void player::action(int direct){
         dR.x = xpos;
         dR.y = ypos;
     }
-
-    std::cout << dR.x << " " << dR.y << std::endl;
 }
 
 void player::render(){
