@@ -50,7 +50,10 @@ void player::action(int direct){
         y += (dR.h - v);
     }*/
     //khi di chuyen thi se di dung theo rect cua map
-    if(dR.x == xpos){
+
+
+    if(player_map->moveable(x, y, v)){
+        if(dR.x == xpos){
         t = dR.x % dR.w;
         t >= (dR.w - t) ? dR.x += (dR.w - t) : dR.x -= t;
     }
@@ -58,8 +61,7 @@ void player::action(int direct){
         t = dR.y % dR.h;
         t >= (dR.h - t) ? dR.y += (dR.h - t) : dR.y -= t;
     }
-
-    if(player_map->moveable(x, y)){}
+    }
     else{
         dR.x = xpos;
         dR.y = ypos;

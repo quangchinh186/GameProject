@@ -24,11 +24,11 @@ void map::create_map(){
     file.close();
 }
 
-bool map::moveable(int x, int y){
-    if(x % destR.w != 0){
+bool map::moveable(int x, int y, int v){
+    if(x % destR.w == v){
         x += (destR.w - (x % destR.w));
     }
-    if(y % destR.h != 0){
+    if(y % destR.h == v){
         y += (destR.h - (y % destR.h));
     }
     int j = x / 40, i = y / 40;

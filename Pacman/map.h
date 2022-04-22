@@ -12,7 +12,7 @@ public:
     void loadmap();
     void create_map();
     void update_map(int x, int y);
-    bool moveable(int x, int y);
+    bool moveable(int x, int y, int v);
     int cherri_left = 4;
 private:
 

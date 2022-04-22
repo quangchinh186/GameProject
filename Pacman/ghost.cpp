@@ -28,6 +28,10 @@ ghost::ghost(int x, int y, int color){
 
 ghost::~ghost(){}
 
+//int x_s[4] = {1, 0, -1, 0};
+//int y_s[4] = {0, 1, 0, -1};
+//int v = 2;
+
 void ghost::render(int cherri){
     if(eaten){
         srcR.x = 0;
@@ -45,7 +49,7 @@ void ghost::render(int cherri){
 
 void ghost::chase(int x, int y, int direct, bool& d){
     int step;
-    if(x == desR.x and y == desR.y and !scare){
+    if(abs(x - desR.x) < 40 and abs(y - desR.y) < 40 and !scare){
         d = true;
     }
 
@@ -57,11 +61,14 @@ void ghost::chase(int x, int y, int direct, bool& d){
     int way2 = sqrt(pow(x - desR.x, 2) + pow(y - desR.y - 1, 2));
     if(way1 < way2){
         step = (x - desR.x) / std::max(abs(x - desR.x), 1);
-
-        desR.x += step*2;
+        if(ghost_map->moveable(desR.x+(step*2), desR.y, 2)){
+            desR.x += step*2;
+        }
     }else{
         step = (y - desR.y) / std::max(abs(y - desR.y), 1);
-        desR.y += step*2;
+        if(ghost_map->moveable(desR.x, desR.y+(step*2), 2)){
+            desR.y += step*2;
+        }
     }
 
 }
