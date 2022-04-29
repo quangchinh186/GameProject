@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     Uint32 frameStart;
     int frametime;
 	game = new Game();
-	game->init("GameWindow", 1200, 800, false);
+	game->init("GameWindow", 1200, 850, false);
 
 	while (game->running())
 	{

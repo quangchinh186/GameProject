@@ -6,7 +6,10 @@
 
 
 player* pacman;
-ghost* red;//, pink, blue, orange;
+ghost* red;
+ghost* pink;
+ghost* blue;
+ghost* orange;
 SDL_Renderer* Game::renderer = nullptr;
 map* gamemap;
 const int fps = 60;
@@ -38,9 +41,9 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 		isRunning = true;
 		pacman = new player("image/pacman.png", 560, 480, 3);
 		red = new ghost(40, 40, 0);
-		//pink = new ghost(40*5, 40*5, 1);
-		//blue = new ghost(40, 40, 2);
-		//orange = new ghost(40*8, 40*8, 3);
+		pink = new ghost(1120, 40, 1);
+		blue = new ghost(120, 640, 2);
+		orange = new ghost(1040, 640, 3);
 		gamemap = new map;
 		gamemap->create_map();
 
@@ -57,7 +60,6 @@ void Game::handleEvents()
             isRunning = false;
     }
     else if(e.type == SDL_KEYDOWN){
-        //std::cout << SDL_GetKeyName(e.key.keysym.sym) << std::endl;
         switch(e.key.keysym.sym){
             case SDLK_d:
             d = 0;
@@ -94,22 +96,23 @@ void Game::update()
         pacman->sprite(d);
     }
     pacman->action(d);
-    red->chase(pacman->xpos, pacman->ypos, 2, pacman->dead);
+    red->chase(pacman->xpos, pacman->ypos, pacman->dead);
+    blue->chase(pacman->xpos, pacman->ypos, pacman->dead);
+    pink->chase(red->xcoor, red->ycoor, pacman->dead);
+    orange->chase(pacman->xpos, pacman->ypos, pacman->dead);
     gamemap->update_map(pacman->xpos, pacman->ypos);
-    std::cout << gamemap->cherri_left << std::endl;
     cherri = gamemap->cherri_left;
 }
 
 void Game::render()
 {
-
 	SDL_RenderClear(renderer);
 	gamemap->loadmap();
 	pacman->render();
 	red->render(cherri);
-	//pink->render();
-	//blue->render();
-	//orange->render();
+	pink->render(cherri);
+	blue->render(cherri);
+	orange->render(cherri);
 	SDL_RenderPresent(renderer);
 }
 

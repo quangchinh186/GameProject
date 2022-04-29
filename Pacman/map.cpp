@@ -26,10 +26,10 @@ void map::create_map(){
 
 bool map::moveable(int x, int y, int v){
     if(x % destR.w == v){
-        x += (destR.w - (x % destR.w));
+        x += (destR.w - v);
     }
     if(y % destR.h == v){
-        y += (destR.h - (y % destR.h));
+        y += (destR.h - v);
     }
     int j = x / 40, i = y / 40;
 
@@ -40,16 +40,16 @@ bool map::moveable(int x, int y, int v){
 }
 
 void map::update_map(int x, int y){
-    int j = x/40, i = y/40;
-    if(m[i][j] == 2){
-        m[i][j] = 0;
+    if(x % 40 <= 20 and y % 40 <= 20){
+        int j = x/40, i = y/40;
+        if(m[i][j] == 2){
+            m[i][j] = 0;
+        }
+        if(m[i][j] == 3){
+            m[i][j] = 0;
+            cherri_left--;
+        }
     }
-    if(m[i][j] == 3){
-        m[i][j] = 0;
-        cherri_left--;
-        std::cout << cherri_left << std::endl;
-    }
-
 }
 
 void map::loadmap(){

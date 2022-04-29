@@ -40,20 +40,8 @@ void player::action(int direct){
     ypos = dR.y;
     dR.x += v * x_step[direct];
     dR.y += v * y_step[direct];
-    int x = dR.x, y = dR.y, t;
-    //di tien theo chieu duong cua Ox can cong them phan thieu de kiem tra tiep xuc voi wall
-    /*
-    if(dR.x > xpos){
-        x += (dR.w - v);
-    }
-    if(dR.y > ypos){
-        y += (dR.h - v);
-    }*/
-    //khi di chuyen thi se di dung theo rect cua map
-
-
-    if(player_map->moveable(x, y, v)){
-        if(dR.x == xpos){
+    int t;
+    if(dR.x == xpos){
         t = dR.x % dR.w;
         t >= (dR.w - t) ? dR.x += (dR.w - t) : dR.x -= t;
     }
@@ -61,7 +49,8 @@ void player::action(int direct){
         t = dR.y % dR.h;
         t >= (dR.h - t) ? dR.y += (dR.h - t) : dR.y -= t;
     }
-    }
+
+    if(player_map->moveable(dR.x, dR.y, v)){}
     else{
         dR.x = xpos;
         dR.y = ypos;

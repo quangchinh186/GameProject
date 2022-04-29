@@ -28,9 +28,10 @@ ghost::ghost(int x, int y, int color){
 
 ghost::~ghost(){}
 
-//int x_s[4] = {1, 0, -1, 0};
-//int y_s[4] = {0, 1, 0, -1};
-//int v = 2;
+int x_s[4] = {1, 0, -1, 0};
+int y_s[4] = {0, 1, 0, -1};
+int face = 0;
+int ghost_v;
 
 void ghost::render(int cherri){
     if(eaten){
@@ -47,29 +48,132 @@ void ghost::render(int cherri){
     }
 }
 
-void ghost::chase(int x, int y, int direct, bool& d){
-    int step;
-    if(abs(x - desR.x) < 40 and abs(y - desR.y) < 40 and !scare){
-        d = true;
+void ghost::chase(int x, int y, bool& player_dead){
+    if(scare){
+        ghost_v = -2;
+    }else{
+        ghost_v = 2;
     }
-
-    if(x == desR.x and y == desR.y and scare){
+    if(abs(x - desR.x) < 20 and abs(y - desR.y) < 20 and !scare){
+        player_dead = true;
+    }
+    if(abs(x - desR.x) < 20 and abs(y - desR.y) < 20 and scare){
         eaten = true;
     }
 
-    int way1 = sqrt(pow(x - desR.x - 1, 2) + pow(y - desR.y, 2));
-    int way2 = sqrt(pow(x - desR.x, 2) + pow(y - desR.y - 1, 2));
-    if(way1 < way2){
-        step = (x - desR.x) / std::max(abs(x - desR.x), 1);
-        if(ghost_map->moveable(desR.x+(step*2), desR.y, 2)){
-            desR.x += step*2;
+    xcoor = desR.x;
+    ycoor = desR.y;
+
+    double way_1, way_2;
+    int sub_face;
+
+    switch(face){
+    case 0:
+        way_1 = sqrt(pow(x - desR.x - ghost_v, 2) + pow(y - desR.y, 2));
+        if(desR.y <= y){
+            way_2 = sqrt(pow(x - desR.x, 2) + pow(y - desR.y - ghost_v, 2));
+            sub_face = 1;
+        }else{
+            way_2 = sqrt(pow(x - desR.x, 2) + pow(y - desR.y + ghost_v, 2));
+            sub_face = 3;
         }
-    }else{
-        step = (y - desR.y) / std::max(abs(y - desR.y), 1);
-        if(ghost_map->moveable(desR.x, desR.y+(step*2), 2)){
-            desR.y += step*2;
+
+        if(way_1 < way_2){
+            face = 0;
+            if(ghost_map->moveable(desR.x + (x_s[face]*ghost_v), desR.y + (y_s[face]*ghost_v), ghost_v)){
+                desR.x += (x_s[face]*ghost_v);
+                desR.y += (y_s[face]*ghost_v);
+            }
+        }else{
+            face = sub_face;
+            if(ghost_map->moveable(desR.x + (x_s[face]*ghost_v), desR.y + (y_s[face]*ghost_v), ghost_v)){
+                desR.x += (x_s[face]*ghost_v);
+                desR.y += (y_s[face]*ghost_v);
+            }
         }
+        break;
+
+    case 1:
+        way_1 = sqrt(pow(x - desR.x, 2) + pow(y - desR.y - ghost_v, 2));
+        if(desR.x <= x){
+            way_2 = sqrt(pow(x - desR.x - ghost_v, 2) + pow(y - desR.y, 2));
+            sub_face = 0;
+        }else{
+            way_2 = sqrt(pow(x - desR.x + ghost_v, 2) + pow(y - desR.y, 2));
+            sub_face = 2;
+        }
+
+        if(way_1 < way_2){
+            face = 1;
+            if(ghost_map->moveable(desR.x + (x_s[face]*ghost_v), desR.y + (y_s[face]*ghost_v), ghost_v)){
+                desR.x += (x_s[face]*ghost_v);
+                desR.y += (y_s[face]*ghost_v);
+            }
+        }else{
+            face = sub_face;
+            if(ghost_map->moveable(desR.x + (x_s[face]*ghost_v), desR.y + (y_s[face]*ghost_v), ghost_v)){
+                desR.x += (x_s[face]*ghost_v);
+                desR.y += (y_s[face]*ghost_v);
+            }
+        }
+        break;
+
+    case 2:
+        way_1 = sqrt(pow(x - desR.x + ghost_v, 2) + pow(y - desR.y, 2));
+        if(desR.y <= y){
+            way_2 = sqrt(pow(x - desR.x, 2) + pow(y - desR.y - ghost_v, 2));
+            sub_face = 1;
+        }else{
+            way_2 = sqrt(pow(x - desR.x, 2) + pow(y - desR.y + ghost_v, 2));
+            sub_face = 3;
+        }
+
+        if(way_1 < way_2){
+            face = 2;
+            if(ghost_map->moveable(desR.x + (x_s[face]*ghost_v), desR.y + (y_s[face]*ghost_v), ghost_v)){
+                desR.x += (x_s[face]*ghost_v);
+                desR.y += (y_s[face]*ghost_v);
+            }
+        }else{
+            face = sub_face;
+            if(ghost_map->moveable(desR.x + (x_s[face]*ghost_v), desR.y + (y_s[face]*ghost_v), ghost_v)){
+                desR.x += (x_s[face]*ghost_v);
+                desR.y += (y_s[face]*ghost_v);
+            }
+        }
+        break;
+
+    case 3:
+        way_1 = sqrt(pow(x - desR.x, 2) + pow(y - desR.y + ghost_v, 2));
+        if(desR.x <= x){
+            way_2 = sqrt(pow(x - desR.x - ghost_v, 2) + pow(y - desR.y, 2));
+            sub_face = 0;
+        }else{
+            way_2 = sqrt(pow(x - desR.x + ghost_v, 2) + pow(y - desR.y, 2));
+            sub_face = 2;
+        }
+
+        if(way_1 < way_2){
+            face = 1;
+            if(ghost_map->moveable(desR.x + (x_s[face]*ghost_v), desR.y + (y_s[face]*ghost_v), ghost_v)){
+                desR.x += (x_s[face]*ghost_v);
+                desR.y += (y_s[face]*ghost_v);
+            }
+        }else{
+            face = sub_face;
+            if(ghost_map->moveable(desR.x + (x_s[face]*ghost_v), desR.y + (y_s[face]*ghost_v), ghost_v)){
+                desR.x += (x_s[face]*ghost_v);
+                desR.y += (y_s[face]*ghost_v);
+            }
+        }
+        break;
+
+
+    default:
+        break;
+
     }
+
 
 }
 
