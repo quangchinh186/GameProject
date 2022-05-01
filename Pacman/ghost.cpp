@@ -50,9 +50,9 @@ void ghost::render(int cherri){
 
 void ghost::chase(int x, int y, bool& player_dead){
     if(scare){
-        ghost_v = -2;
+        ghost_v = -1;
     }else{
-        ghost_v = 2;
+        ghost_v = 1;
     }
     if(abs(x - desR.x) < 20 and abs(y - desR.y) < 20 and !scare){
         player_dead = true;
@@ -60,121 +60,173 @@ void ghost::chase(int x, int y, bool& player_dead){
     if(abs(x - desR.x) < 20 and abs(y - desR.y) < 20 and scare){
         eaten = true;
     }
-
     xcoor = desR.x;
     ycoor = desR.y;
-
-    double way_1, way_2;
-    int sub_face;
+    double way_1, way_2, way_3;
+    int temp;
 
     switch(face){
     case 0:
-        way_1 = sqrt(pow(x - desR.x - ghost_v, 2) + pow(y - desR.y, 2));
-        if(desR.y <= y){
+        if(ghost_map->moveable(desR.x+(x_s[0]*ghost_v), desR.y+(y_s[0]*ghost_v), ghost_v))
+        {
+            way_1 = sqrt(pow(x - desR.x - ghost_v, 2) + pow(y - desR.y, 2));
+        }else{way_1 = 100000;}
+        if(ghost_map->moveable(desR.x+(x_s[1]*ghost_v), desR.y+(y_s[1]*ghost_v), ghost_v))
+        {
             way_2 = sqrt(pow(x - desR.x, 2) + pow(y - desR.y - ghost_v, 2));
-            sub_face = 1;
-        }else{
-            way_2 = sqrt(pow(x - desR.x, 2) + pow(y - desR.y + ghost_v, 2));
-            sub_face = 3;
+        }else{way_2 = 100000;}
+        if(ghost_map->moveable(desR.x+(x_s[3]*ghost_v), desR.y+(y_s[3]*ghost_v), ghost_v))
+        {
+            way_3 = sqrt(pow(x - desR.x, 2) + pow(y - desR.y + ghost_v, 2));
+        }else{way_3 = 100000;}
+
+        if(way_1 < way_2 && way_1 < way_3){
+            face = 0;
+            desR.x += (x_s[face]*ghost_v);
+            desR.y += (y_s[face]*ghost_v);
+        }
+        else if(way_2 < way_1 && way_2 < way_3){
+            face = 3;
+            desR.x += (x_s[face]*ghost_v);
+            desR.y += (y_s[face]*ghost_v);
+        }
+        else if(way_3 < way_1 && way_3 < way_2){
+            face = 1;
+            desR.x += (x_s[face]*ghost_v);
+            desR.y += (y_s[face]*ghost_v);
         }
 
-        if(way_1 < way_2){
-            face = 0;
-            if(ghost_map->moveable(desR.x + (x_s[face]*ghost_v), desR.y + (y_s[face]*ghost_v), ghost_v)){
-                desR.x += (x_s[face]*ghost_v);
-                desR.y += (y_s[face]*ghost_v);
-            }
-        }else{
-            face = sub_face;
-            if(ghost_map->moveable(desR.x + (x_s[face]*ghost_v), desR.y + (y_s[face]*ghost_v), ghost_v)){
-                desR.x += (x_s[face]*ghost_v);
-                desR.y += (y_s[face]*ghost_v);
-            }
+        if(desR.x == xcoor){
+            temp = desR.x % desR.w;
+            temp >= (desR.w - temp) ? desR.x += (desR.w - temp) : desR.x -= temp;
+        }
+        if(desR.y == ycoor){
+            temp = desR.y % desR.h;
+            temp >= (desR.h - temp) ? desR.y += (desR.h - temp) : desR.y -= temp;
         }
         break;
 
     case 1:
-        way_1 = sqrt(pow(x - desR.x, 2) + pow(y - desR.y - ghost_v, 2));
-        if(desR.x <= x){
+        if(ghost_map->moveable(desR.x+(x_s[1]*ghost_v), desR.y+(y_s[1]*ghost_v), ghost_v))
+        {
+            way_1 = sqrt(pow(x - desR.x, 2) + pow(y - desR.y - ghost_v, 2));
+        }else{way_1 = 100000;}
+        if(ghost_map->moveable(desR.x+(x_s[0]*ghost_v), desR.y+(y_s[0]*ghost_v), ghost_v))
+        {
             way_2 = sqrt(pow(x - desR.x - ghost_v, 2) + pow(y - desR.y, 2));
-            sub_face = 0;
-        }else{
-            way_2 = sqrt(pow(x - desR.x + ghost_v, 2) + pow(y - desR.y, 2));
-            sub_face = 2;
-        }
+        }else{way_2 = 100000;}
+        if(ghost_map->moveable(desR.x+(x_s[2]*ghost_v), desR.y+(y_s[2]*ghost_v), ghost_v))
+        {
+            way_3 = sqrt(pow(x - desR.x + ghost_v, 2) + pow(y - desR.y, 2));
+        }else{way_3 = 100000;}
 
-        if(way_1 < way_2){
+        if(way_1 < way_2 && way_1 < way_3){
             face = 1;
-            if(ghost_map->moveable(desR.x + (x_s[face]*ghost_v), desR.y + (y_s[face]*ghost_v), ghost_v)){
-                desR.x += (x_s[face]*ghost_v);
-                desR.y += (y_s[face]*ghost_v);
-            }
-        }else{
-            face = sub_face;
-            if(ghost_map->moveable(desR.x + (x_s[face]*ghost_v), desR.y + (y_s[face]*ghost_v), ghost_v)){
-                desR.x += (x_s[face]*ghost_v);
-                desR.y += (y_s[face]*ghost_v);
-            }
+            desR.x += (x_s[face]*ghost_v);
+            desR.y += (y_s[face]*ghost_v);
+        }
+        else if(way_2 < way_1 && way_2 < way_3){
+            face = 0;
+            desR.x += (x_s[face]*ghost_v);
+            desR.y += (y_s[face]*ghost_v);
+        }
+        else if(way_3 < way_1 && way_3 < way_2){
+            face = 2;
+            desR.x += (x_s[face]*ghost_v);
+            desR.y += (y_s[face]*ghost_v);
+        }
+        if(desR.x == xcoor){
+            temp = desR.x % desR.w;
+            temp >= (desR.w - temp) ? desR.x += (desR.w - temp) : desR.x -= temp;
+        }
+        if(desR.y == ycoor){
+            temp = desR.y % desR.h;
+            temp >= (desR.h - temp) ? desR.y += (desR.h - temp) : desR.y -= temp;
         }
         break;
 
     case 2:
-        way_1 = sqrt(pow(x - desR.x + ghost_v, 2) + pow(y - desR.y, 2));
-        if(desR.y <= y){
+    if(ghost_map->moveable(desR.x+(x_s[2]*ghost_v), desR.y+(y_s[2]*ghost_v), ghost_v))
+        {
+            way_1 = sqrt(pow(x - desR.x + ghost_v, 2) + pow(y - desR.y, 2));
+        }else{way_1 = 100000;}
+        if(ghost_map->moveable(desR.x+(x_s[1]*ghost_v), desR.y+(y_s[1]*ghost_v), ghost_v))
+        {
             way_2 = sqrt(pow(x - desR.x, 2) + pow(y - desR.y - ghost_v, 2));
-            sub_face = 1;
-        }else{
-            way_2 = sqrt(pow(x - desR.x, 2) + pow(y - desR.y + ghost_v, 2));
-            sub_face = 3;
-        }
+        }else{way_2 = 100000;}
+        if(ghost_map->moveable(desR.x+(x_s[3]*ghost_v), desR.y+(y_s[3]*ghost_v), ghost_v))
+        {
+            way_3 = sqrt(pow(x - desR.x, 2) + pow(y - desR.y + ghost_v, 2));
+        }else{way_3 = 100000;}
 
-        if(way_1 < way_2){
+        if(way_1 <= way_2 && way_1 <= way_3){
             face = 2;
-            if(ghost_map->moveable(desR.x + (x_s[face]*ghost_v), desR.y + (y_s[face]*ghost_v), ghost_v)){
-                desR.x += (x_s[face]*ghost_v);
-                desR.y += (y_s[face]*ghost_v);
-            }
-        }else{
-            face = sub_face;
-            if(ghost_map->moveable(desR.x + (x_s[face]*ghost_v), desR.y + (y_s[face]*ghost_v), ghost_v)){
-                desR.x += (x_s[face]*ghost_v);
-                desR.y += (y_s[face]*ghost_v);
-            }
+            desR.x += (x_s[face]*ghost_v);
+            desR.y += (y_s[face]*ghost_v);
+        }
+        else if(way_2 <= way_1 && way_2 <= way_3){
+            face = 3;
+            desR.x += (x_s[face]*ghost_v);
+            desR.y += (y_s[face]*ghost_v);
+        }
+        else if(way_3 < way_1 && way_3 < way_2){
+            face = 1;
+            desR.x += (x_s[face]*ghost_v);
+            desR.y += (y_s[face]*ghost_v);
+        }
+        if(desR.x == xcoor){
+            temp = desR.x % desR.w;
+            temp >= (desR.w - temp) ? desR.x += (desR.w - temp) : desR.x -= temp;
+        }
+        if(desR.y == ycoor){
+            temp = desR.y % desR.h;
+            temp >= (desR.h - temp) ? desR.y += (desR.h - temp) : desR.y -= temp;
         }
         break;
 
     case 3:
-        way_1 = sqrt(pow(x - desR.x, 2) + pow(y - desR.y + ghost_v, 2));
-        if(desR.x <= x){
+    if(ghost_map->moveable(desR.x+(x_s[3]*ghost_v), desR.y+(y_s[3]*ghost_v), ghost_v))
+        {
+            way_1 = sqrt(pow(x - desR.x, 2) + pow(y - desR.y + ghost_v, 2));
+        }else{way_1 = 100000;}
+        if(ghost_map->moveable(desR.x+(x_s[0]*ghost_v), desR.y+(y_s[0]*ghost_v), ghost_v))
+        {
             way_2 = sqrt(pow(x - desR.x - ghost_v, 2) + pow(y - desR.y, 2));
-            sub_face = 0;
-        }else{
-            way_2 = sqrt(pow(x - desR.x + ghost_v, 2) + pow(y - desR.y, 2));
-            sub_face = 2;
-        }
+        }else{way_2 = 100000;}
+        if(ghost_map->moveable(desR.x+(x_s[2]*ghost_v), desR.y+(y_s[2]*ghost_v), ghost_v))
+        {
+            way_3 = sqrt(pow(x - desR.x + ghost_v, 2) + pow(y - desR.y, 2));
+        }else{way_3 = 100000;}
 
-        if(way_1 < way_2){
-            face = 1;
-            if(ghost_map->moveable(desR.x + (x_s[face]*ghost_v), desR.y + (y_s[face]*ghost_v), ghost_v)){
-                desR.x += (x_s[face]*ghost_v);
-                desR.y += (y_s[face]*ghost_v);
-            }
-        }else{
-            face = sub_face;
-            if(ghost_map->moveable(desR.x + (x_s[face]*ghost_v), desR.y + (y_s[face]*ghost_v), ghost_v)){
-                desR.x += (x_s[face]*ghost_v);
-                desR.y += (y_s[face]*ghost_v);
-            }
+        if(way_1 <= way_2 && way_1 <= way_3){
+            face = 3;
+            desR.x += (x_s[face]*ghost_v);
+            desR.y += (y_s[face]*ghost_v);
+        }
+        else if(way_2 < way_1 && way_2 < way_3){
+            face = 0;
+            desR.x += (x_s[face]*ghost_v);
+            desR.y += (y_s[face]*ghost_v);
+        }
+        else if(way_3 < way_1 && way_3 < way_2){
+            face = 2;
+            desR.x += (x_s[face]*ghost_v);
+            desR.y += (y_s[face]*ghost_v);
+        }
+        if(desR.x == xcoor){
+            temp = desR.x % desR.w;
+            temp >= (desR.w - temp) ? desR.x += (desR.w - temp) : desR.x -= temp;
+        }
+        if(desR.y == ycoor){
+            temp = desR.y % desR.h;
+            temp >= (desR.h - temp) ? desR.y += (desR.h - temp) : desR.y -= temp;
         }
         break;
-
 
     default:
         break;
 
     }
-
-
 }
 
 
