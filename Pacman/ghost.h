@@ -12,6 +12,9 @@ public:
     void chase(int x, int y, bool& player_dead);
     void sprite(int direct);
     int xcoor, ycoor;
+    bool t_left = true;
+    bool t_right = true;
+    bool go_straight = true;
 
 private:
     SDL_Texture* ghost_tex;

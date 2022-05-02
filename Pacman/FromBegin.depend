@@ -100,7 +100,7 @@
 	<iostream>
 	<cmath>
 
-1651388634 source:e:\code\gameproject\pacman\game.cpp
+1651488834 source:e:\code\gameproject\pacman\game.cpp
 	"game.h"
 	"load_image.h"
 	"player.h"
@@ -115,11 +115,11 @@
 	"load_image.h"
 	<fstream>
 
-1651388634 e:\code\gameproject\pacman\ghost.h
+1651486234 e:\code\gameproject\pacman\ghost.h
 	"game.h"
 	"load_image.h"
 
-1651394588 source:e:\code\gameproject\pacman\ghost.cpp
+1651488834 source:e:\code\gameproject\pacman\ghost.cpp
 	"ghost.h"
 	"map.h"
 	<cmath>
