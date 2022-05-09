@@ -25,18 +25,19 @@ void map::create_map(){
 }
 
 bool map::moveable(int x, int y, int v){
-    if(x % destR.w == v){
-        x += (destR.w - v);
-    }
-    if(y % destR.h == v){
-        y += (destR.h - v);
-    }
     int j = x / 40, i = y / 40;
-
     if(m[i][j] == 1 || m[i][j] == 4){
         return false;
     }
     return true;
+}
+
+bool map::turnable(int x, int y){
+    if(x % destR.w == 0 and y % destR.h == 0){
+        return true;
+    }
+
+    return false;
 }
 
 void map::update_map(int x, int y){

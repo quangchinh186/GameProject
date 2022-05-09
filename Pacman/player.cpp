@@ -33,28 +33,27 @@ void player::sprite(int direct){
 
 int x_step[4] = {1, 0, -1, 0};
 int y_step[4] = {0, 1, 0, -1};
-int v = 5;
+int v = 5, sub = 0;
 
 void player::action(int direct){
     xpos = dR.x;
     ypos = dR.y;
-    dR.x += v * x_step[direct];
-    dR.y += v * y_step[direct];
-    int t;
-    if(dR.x == xpos){
-        t = dR.x % dR.w;
-        t >= (dR.w - t) ? dR.x += (dR.w - t) : dR.x -= t;
-    }
-    if(dR.y == ypos){
-        t = dR.y % dR.h;
-        t >= (dR.h - t) ? dR.y += (dR.h - t) : dR.y -= t;
-    }
-
-    if(player_map->moveable(dR.x, dR.y, v)){}
-    else{
+    if(player_map->turnable(xpos, ypos)){
+        dR.x += v * x_step[direct];
+        dR.y += v * y_step[direct];
+        if(player_map->moveable(xpos+(dR.w*x_step[direct]), ypos+(dR.h*y_step[direct]), v)){}
+        else{
         dR.x = xpos;
         dR.y = ypos;
+        }
     }
+    else{
+        dR.x += v * x_step[sub];
+        dR.y += v * y_step[sub];
+        direct = sub;
+    }
+
+    sub = direct;
 }
 
 void player::render(){

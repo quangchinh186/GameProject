@@ -30,8 +30,8 @@ ghost::~ghost(){}
 
 int x_s[4] = {1, 0, -1, 0};
 int y_s[4] = {0, 1, 0, -1};
-int face = 0;
-int ghost_v = 3;
+int face = 0, t = 0;
+int ghost_v = 5;
 
 void ghost::render(int cherri){
     if(eaten){
@@ -50,8 +50,8 @@ void ghost::render(int cherri){
 
 void ghost::chase(int x, int y, bool& player_dead){
     if(scare){
-        x = 0;
-        y = 0;
+        x = -x;
+        y = -y;
     }
     if(abs(x - desR.x) < 20 and abs(y - desR.y) < 20 and !scare){
         player_dead = true;
@@ -64,6 +64,7 @@ void ghost::chase(int x, int y, bool& player_dead){
     double way_1, way_2, way_3;
     int temp;
 
+if(ghost_map->turnable(xcoor, ycoor)){
     switch(face){
     case 0:
         face = 0;
@@ -129,8 +130,6 @@ void ghost::chase(int x, int y, bool& player_dead){
                 desR.y += y_s[face]*ghost_v;
             }
         }
-
-
         break;
 
     case 1:
@@ -139,13 +138,11 @@ void ghost::chase(int x, int y, bool& player_dead){
             way_1 = sqrt(pow(x-(desR.x+(x_s[face]*ghost_v)), 2) + pow(y - (desR.y+(y_s[face]*ghost_v)), 2));
             go_straight = true;
         }else{go_straight = false;}
-
         face = 2;
         if(ghost_map->moveable(desR.x+(x_s[face]*ghost_v), desR.y+(y_s[face]*ghost_v), ghost_v)){
             way_2 = sqrt(pow(x-(desR.x+(x_s[face]*ghost_v)), 2) + pow(y - (desR.y+(y_s[face]*ghost_v)), 2));
             t_right = true;
         }else{t_right = false;}
-
         face = 0;
         if(ghost_map->moveable(desR.x+(x_s[face]*ghost_v), desR.y+(y_s[face]*ghost_v), ghost_v)){
             way_3 = sqrt(pow(x-(desR.x+(x_s[face]*ghost_v)), 2) + pow(y - (desR.y+(y_s[face]*ghost_v)), 2));
@@ -173,7 +170,6 @@ void ghost::chase(int x, int y, bool& player_dead){
                 desR.x += x_s[face]*ghost_v;
                 desR.y += y_s[face]*ghost_v;
             }
-
         }else if(go_straight){
             if(t_left and t_right){
                 way_2 < way_3 ? temp = 2 : temp = 0;
@@ -191,16 +187,12 @@ void ghost::chase(int x, int y, bool& player_dead){
                 desR.x += x_s[face]*ghost_v;
                 desR.y += y_s[face]*ghost_v;
             }
-
             else{
                 face = 1;
                 desR.x += x_s[face]*ghost_v;
                 desR.y += y_s[face]*ghost_v;
             }
         }
-
-
-
         break;
 
     case 2:
@@ -209,13 +201,11 @@ void ghost::chase(int x, int y, bool& player_dead){
             way_1 = sqrt(pow(x-(desR.x+(x_s[face]*ghost_v)), 2) + pow(y - (desR.y+(y_s[face]*ghost_v)), 2));
             go_straight = true;
         }else{go_straight = false;}
-
         face = 3;
         if(ghost_map->moveable(desR.x+(x_s[face]*ghost_v), desR.y+(y_s[face]*ghost_v), ghost_v)){
             way_2 = sqrt(pow(x-(desR.x+(x_s[face]*ghost_v)), 2) + pow(y - (desR.y+(y_s[face]*ghost_v)), 2));
             t_right = true;
         }else{t_right = false;}
-
         face = 1;
         if(ghost_map->moveable(desR.x+(x_s[face]*ghost_v), desR.y+(y_s[face]*ghost_v), ghost_v)){
             way_3 = sqrt(pow(x-(desR.x+(x_s[face]*ghost_v)), 2) + pow(y - (desR.y+(y_s[face]*ghost_v)), 2));
@@ -243,7 +233,6 @@ void ghost::chase(int x, int y, bool& player_dead){
                 desR.x += x_s[face]*ghost_v;
                 desR.y += y_s[face]*ghost_v;
             }
-
         }else if(go_straight){
             if(t_left and t_right){
                 way_2 < way_3 ? temp = 3 : temp = 1;
@@ -267,9 +256,6 @@ void ghost::chase(int x, int y, bool& player_dead){
                 desR.y += y_s[face]*ghost_v;
             }
         }
-
-
-
         break;
 
     case 3:
@@ -278,13 +264,11 @@ void ghost::chase(int x, int y, bool& player_dead){
             way_1 = sqrt(pow(x-(desR.x+(x_s[face]*ghost_v)), 2) + pow(y - (desR.y+(y_s[face]*ghost_v)), 2));
             go_straight = true;
         }else{go_straight = false;}
-
         face = 0;
         if(ghost_map->moveable(desR.x+(x_s[face]*ghost_v), desR.y+(y_s[face]*ghost_v), ghost_v)){
             way_2 = sqrt(pow(x-(desR.x+(x_s[face]*ghost_v)), 2) + pow(y - (desR.y+(y_s[face]*ghost_v)), 2));
             t_right = true;
         }else{t_right = false;}
-
         face = 1;
         if(ghost_map->moveable(desR.x+(x_s[face]*ghost_v), desR.y+(y_s[face]*ghost_v), ghost_v)){
             way_3 = sqrt(pow(x-(desR.x+(x_s[face]*ghost_v)), 2) + pow(y - (desR.y+(y_s[face]*ghost_v)), 2));
@@ -330,19 +314,25 @@ void ghost::chase(int x, int y, bool& player_dead){
                 desR.x += x_s[face]*ghost_v;
                 desR.y += y_s[face]*ghost_v;
             }
-
             else{
                 face = 3;
                 desR.x += x_s[face]*ghost_v;
                 desR.y += y_s[face]*ghost_v;
             }
         }
-
-
         break;
 
-    }
+    }}
+else{
+    desR.x += x_s[face]*ghost_v;
+    desR.y += y_s[face]*ghost_v;
+    //face = t;
 }
+
+    //t = face;
+}
+
+
 
 
 
