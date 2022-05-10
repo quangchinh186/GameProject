@@ -6,15 +6,13 @@
 
 class ghost{
 public:
-    ghost(int x, int y, int color);
+    ghost(int x, int y, int _color);
     ~ghost();
     void render(int cherri);
-    void chase(int x, int y, bool& player_dead);
+    void chase(int x, int y, int color);
     void sprite(int direct);
-    int xcoor, ycoor;
-    bool t_left = true;
-    bool t_right = true;
-    bool go_straight = true;
+    int xcoor, ycoor, source;
+    bool kill(int x, int y);
 
 private:
     SDL_Texture* ghost_tex;

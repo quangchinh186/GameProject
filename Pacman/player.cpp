@@ -41,7 +41,7 @@ void player::action(int direct){
     if(player_map->turnable(xpos, ypos)){
         dR.x += v * x_step[direct];
         dR.y += v * y_step[direct];
-        if(player_map->moveable(xpos+(dR.w*x_step[direct]), ypos+(dR.h*y_step[direct]), v)){}
+        if(player_map->moveable(xpos+(dR.w*x_step[direct]), ypos+(dR.h*y_step[direct]))){}
         else{
         dR.x = xpos;
         dR.y = ypos;
