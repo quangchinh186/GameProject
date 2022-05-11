@@ -26,7 +26,7 @@ void map::create_map(){
 
 bool map::moveable(int x, int y){
     int j = x / destR.w, i = y / destR.h;
-    if(m[i][j] == 1 || m[i][j] == 4){
+    if(m[i][j] == 1 ){
         return false;
     }
     return true;

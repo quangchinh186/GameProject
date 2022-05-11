@@ -95,17 +95,20 @@ void Game::update()
         change_frame = 0;
         pacman->sprite(d);
     }
+    int x = pacman->xpos, y = pacman->ypos;
     pacman->action(d);
-    red->chase(pacman->xpos, pacman->ypos, 0);
-    pink->chase(0, 0, 1);
-    blue->chase(pacman->xpos, pacman->ypos, 2);
-    orange->chase(pacman->xpos - 400 , pacman->ypos - 100, 3);
-    gamemap->update_map(pacman->xpos, pacman->ypos);
+    red->chase(x, y, red->facing);
+    pink->chase(red->xcoor, red->ycoor, pink->facing);
+    blue->chase(x + 120, y, blue->facing);
+    orange->chase(x - 400 , y - 100, orange->facing);
+    gamemap->update_map(x, y);
     cherri = gamemap->cherri_left;
-    if(red->kill(pacman->xpos, pacman->ypos) || pink->kill(pacman->xpos, pacman->ypos)
-       || blue->kill(pacman->xpos, pacman->ypos) || orange->kill(pacman->xpos, pacman->ypos)){
+    if(red->meet(x, y) || pink->meet(x, y) || blue->meet(x, y) || orange->meet(x, y)){
         pacman->dead = true;
+    }else{
+
     }
+
 }
 
 void Game::render()
@@ -118,7 +121,7 @@ void Game::render()
 	blue->render(cherri);
 	orange->render(cherri);
 	SDL_RenderPresent(renderer);
-	//std::cout << red->color  << " " << pink->color << " " << blue->color << " " << orange->color << std::endl;
+
 }
 
 void Game::clean()

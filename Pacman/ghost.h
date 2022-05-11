@@ -9,10 +9,12 @@ public:
     ghost(int x, int y, int _color);
     ~ghost();
     void render(int cherri);
-    void chase(int x, int y, int color);
+    void chase(int x, int y, int& face);
     void sprite(int direct);
-    int xcoor, ycoor, source;
-    bool kill(int x, int y);
+    int xcoor, ycoor, source, facing = 0;
+    int temp_face = 0;
+    bool meet(int x, int y);
+    bool get_eaten(int x, int y);
 
 private:
     SDL_Texture* ghost_tex;
