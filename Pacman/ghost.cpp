@@ -5,6 +5,7 @@
 
 map* ghost_map;
 
+int safe_house_x, safe_house_y;
 
 ghost::ghost(int x, int y, int _color){
     ghost_tex = Texture::NewTexture("image/ghost.png");
@@ -27,6 +28,15 @@ ghost::ghost(int x, int y, int _color){
     eaten = false;
     scare = false;
 
+    for(int i = 0; i < 20; i++){
+        for(int j = 0; j < 30; j ++){
+            if(ghost_map->m[i][j] == 4){
+                safe_house_x = desR.w * (j+1);
+                safe_house_y = desR.h * (i+1);
+            }
+        }
+    }
+
 }
 
 ghost::~ghost(){}
@@ -34,7 +44,7 @@ ghost::~ghost(){}
 int x_s[4] = {1, 0, -1, 0};
 int y_s[4] = {0, 1, 0, -1};
 int cherri_on_map = 4, time = 0;
-int ghost_v;
+
 double max_distance = 10000;
 
 
@@ -44,46 +54,47 @@ void ghost::render(int cherri){
         SDL_RenderCopy(Game::renderer, ghost_eaten, &srcR, &desR);
     }
     else if(cherri != cherri_on_map ){
+
         time++;
         scare = true;
+        //ghost_v = -2;
         srcR.x = 0;
         SDL_RenderCopy(Game::renderer, ghost_scare, &srcR, &desR);
-        if(time == 1500){
+        if(time == 1000){
             cherri_on_map = cherri;
             scare = false;
+            //ghost_v = 2;
             time = 0;
         }
     }
     else{
+
         srcR.x = source;
         SDL_RenderCopy(Game::renderer, ghost_tex, &srcR, &desR);
     }
 
-
+    std::cout << xcoor << " " << ycoor << std::endl;
 }
 
 void ghost::chase(int x, int y, int& face){
-    if(scare){
-        ghost_v = 2;
-    }else{
-        ghost_v = 4;
-    }
-
-    if(eaten){
-        x = 500;
-        y = 400;
-    }
-
     xcoor = desR.x;
     ycoor = desR.y;
+    if(eaten){
+        x = safe_house_x;
+        y = safe_house_y;
+    }
+
+
     double way_1, way_2, way_3;
     int temp;
+
     double x_1 = static_cast<float>(xcoor), x_2 = static_cast<float>(x);
     double y_1 = static_cast<float>(ycoor), y_2 = static_cast<float>(y);
 
-if(ghost_map->turnable(xcoor, ycoor)){
+if(ghost_map->turnable(xcoor, ycoor) ){
     switch(face){
     case 0:
+
         //di thang
         if(ghost_map->moveable(xcoor + (x_s[face]*desR.w), ycoor + (y_s[face]*desR.h))){
             way_1 = pow(x_1 - x_2 + (x_s[face]*desR.w), 2) + pow(y_1 - y_2 + (y_s[face]*desR.h), 2);
@@ -108,6 +119,7 @@ if(ghost_map->turnable(xcoor, ycoor)){
         break;
 
     case 1:
+
         //di thang
         if(ghost_map->moveable(xcoor + (x_s[face]*desR.w), ycoor + (y_s[face]*desR.h))){
             way_1 = pow(x_1 - x_2 + (x_s[face]*desR.w), 2) + pow(y_1 - y_2 + (y_s[face]*desR.h), 2);
@@ -132,6 +144,7 @@ if(ghost_map->turnable(xcoor, ycoor)){
         break;
 
     case 2:
+
         //di thang
         if(ghost_map->moveable(xcoor + (x_s[face]*desR.w), ycoor + (y_s[face]*desR.h))){
             way_1 = pow(x_1 - x_2 + (x_s[face]*desR.w), 2) + pow(y_1 - y_2 + (y_s[face]*desR.h), 2);
@@ -156,6 +169,7 @@ if(ghost_map->turnable(xcoor, ycoor)){
         break;
 
     case 3:
+
         //di thang
         if(ghost_map->moveable(xcoor + (x_s[face]*desR.w), ycoor + (y_s[face]*desR.h))){
             way_1 = pow(x_1 - x_2 + (x_s[face]*desR.w), 2) + pow(y_1 - y_2 + (y_s[face]*desR.h), 2);
@@ -184,8 +198,11 @@ if(ghost_map->turnable(xcoor, ycoor)){
 else{
     face = temp_face;
 }
+
     desR.x += x_s[face]*ghost_v;
     desR.y += y_s[face]*ghost_v;
+
+
 }
 
 bool ghost::meet(int x, int y){
@@ -208,9 +225,5 @@ bool ghost::get_eaten(int x, int y){
     return false;
 }
 
-void ghost::sprite(int direct){
-
-
-}
 
 

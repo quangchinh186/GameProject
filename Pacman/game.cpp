@@ -3,6 +3,8 @@
 #include "player.h"
 #include "map.h"
 #include "ghost.h"
+#include <cstdlib>
+#include <ctime>
 
 
 player* pacman;
@@ -10,6 +12,7 @@ ghost* red;
 ghost* pink;
 ghost* blue;
 ghost* orange;
+
 SDL_Renderer* Game::renderer = nullptr;
 map* gamemap;
 const int fps = 60;
@@ -87,8 +90,14 @@ int change_frame = 0, speed = 6;
 
 void Game::update()
 {
+    if(gamemap->win()){
+        isRunning = false;
+        std::cout << "You Won !!!" << std::endl;
+    }
+
     if(pacman->dead){
         isRunning = false;
+        std::cout << "Game Over !" << std::endl;
     }
     change_frame++;
     if(fps / change_frame == speed){
@@ -96,19 +105,23 @@ void Game::update()
         pacman->sprite(d);
     }
     int x = pacman->xpos, y = pacman->ypos;
+    int x_rand = rand() % 1200 + 1, y_rand = rand() % 800 + 1;
+
     pacman->action(d);
     red->chase(x, y, red->facing);
-    pink->chase(red->xcoor, red->ycoor, pink->facing);
-    blue->chase(x + 120, y, blue->facing);
-    orange->chase(x - 400 , y - 100, orange->facing);
+    pink->chase(x_rand, y_rand, pink->facing);
+    blue->chase(x_rand , x_rand, blue->facing);
+    orange->chase(y_rand , y_rand, orange->facing);
     gamemap->update_map(x, y);
     cherri = gamemap->cherri_left;
     if(red->meet(x, y) || pink->meet(x, y) || blue->meet(x, y) || orange->meet(x, y)){
         pacman->dead = true;
+
     }else{
 
     }
-
+    std::cout << "here" << std::endl;
+    //std::cout << red->xcoor << " " << red->ycoor << std::endl;
 }
 
 void Game::render()

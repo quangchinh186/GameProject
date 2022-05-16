@@ -10,11 +10,13 @@ public:
     ~ghost();
     void render(int cherri);
     void chase(int x, int y, int& face);
-    void sprite(int direct);
+
     int xcoor, ycoor, source, facing = 0;
     int temp_face = 0;
+    int ghost_v = 4;
     bool meet(int x, int y);
     bool get_eaten(int x, int y);
+
 
 private:
     SDL_Texture* ghost_tex;

@@ -15,6 +15,8 @@ public:
     bool moveable(int x, int y);
     bool turnable(int x, int y);
     int cherri_left = 4;
+    bool win();
+
 private:
 
     SDL_Texture* wall;

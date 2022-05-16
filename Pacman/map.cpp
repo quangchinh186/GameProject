@@ -53,6 +53,19 @@ void map::update_map(int x, int y){
     }
 }
 
+bool map::win(){
+    bool cnt = true;
+    for(int i = 0; i < 20 ; i++){
+        for(int j = 0; j < 30; j++){
+            if(m[i][j] == 2){
+                cnt = false;
+            }
+        }
+    }
+
+    return cnt;
+}
+
 void map::loadmap(){
 
     for(int i = 0; i < 20 ; i++){
