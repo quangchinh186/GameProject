@@ -48,21 +48,20 @@ int cherri_on_map = 4, time = 0;
 double max_distance = 10000;
 
 
-void ghost::render(int cherri){
-    if(eaten){
+void ghost::render(int cherri, bool& sc, bool& ate){
+    if(ate){
         srcR.x = 0;
         SDL_RenderCopy(Game::renderer, ghost_eaten, &srcR, &desR);
     }
     else if(cherri != cherri_on_map ){
-
         time++;
-        scare = true;
+        sc = true;
         //ghost_v = -2;
         srcR.x = 0;
         SDL_RenderCopy(Game::renderer, ghost_scare, &srcR, &desR);
         if(time == 1000){
             cherri_on_map = cherri;
-            scare = false;
+            sc = false;
             //ghost_v = 2;
             time = 0;
         }
@@ -73,15 +72,20 @@ void ghost::render(int cherri){
         SDL_RenderCopy(Game::renderer, ghost_tex, &srcR, &desR);
     }
 
-    std::cout << xcoor << " " << ycoor << std::endl;
+
 }
 
-void ghost::chase(int x, int y, int& face){
+void ghost::chase(int x, int y, int& face, bool ate){
     xcoor = desR.x;
     ycoor = desR.y;
-    if(eaten){
+    if(ate){
         x = safe_house_x;
         y = safe_house_y;
+        if(desR.x == x && desR.y == y){
+            ate = false;
+        }
+    }else{
+
     }
 
 
@@ -205,25 +209,31 @@ else{
 
 }
 
-bool ghost::meet(int x, int y){
-    if(abs(desR.x - x) <= desR.w/2 && abs(desR.y - y) <= desR.h/2 && !scare){
-        eaten = false;
+void ghost::go_to_safehouse(){
+
+}
+
+bool ghost::meet(int x, int y, bool& sc, bool& ate){
+    if(ate){
+        x = safe_house_x;
+        y = safe_house_y;
+    }
+
+    if(abs(desR.x - x) <= desR.w/2 && abs(desR.y - y) <= desR.h/2 && !sc){
         return true;
-    }else if(abs(desR.x - x) <= desR.w/2 && abs(desR.y - y) <= desR.h/2 && scare){
-        eaten = true;
+    }else if(abs(desR.x - x) <= desR.w/2 && abs(desR.y - y) <= desR.h/2 && sc){
+        ate = true;
+        return false;
+    }
+    else if(abs(desR.x - x) <= desR.w/2 && abs(desR.y - y) <= desR.h/2 && ate){
+        ate = false;
         return false;
     }
 
     return false;
 }
 
-bool ghost::get_eaten(int x, int y){
-    if(abs(desR.x - x) <= desR.w/2 && abs(desR.y - y) <= desR.h/2 && scare){
-        eaten = true;
-        return true;
-    }
-    return false;
-}
+
 
 
 

@@ -108,19 +108,18 @@ void Game::update()
     int x_rand = rand() % 1200 + 1, y_rand = rand() % 800 + 1;
 
     pacman->action(d);
-    red->chase(x, y, red->facing);
-    pink->chase(x_rand, y_rand, pink->facing);
-    blue->chase(x_rand , x_rand, blue->facing);
-    orange->chase(y_rand , y_rand, orange->facing);
+
+    red->chase(x, y, red->facing, red->eaten);
+    pink->chase(x_rand, y_rand, pink->facing, pink->eaten);
+    blue->chase(x_rand , x_rand, blue->facing, blue->eaten);
+    orange->chase(y_rand , y_rand, orange->facing, orange->eaten);
     gamemap->update_map(x, y);
     cherri = gamemap->cherri_left;
-    if(red->meet(x, y) || pink->meet(x, y) || blue->meet(x, y) || orange->meet(x, y)){
+    if(red->meet(x, y, red->scare, red->eaten) || pink->meet(x, y, pink->scare, pink->eaten) || blue->meet(x, y, blue->scare, blue->eaten) || orange->meet(x, y, orange->scare, orange->eaten)){
         pacman->dead = true;
-
-    }else{
-
     }
-    std::cout << "here" << std::endl;
+
+
     //std::cout << red->xcoor << " " << red->ycoor << std::endl;
 }
 
@@ -129,10 +128,10 @@ void Game::render()
 	SDL_RenderClear(renderer);
 	gamemap->loadmap();
 	pacman->render();
-	red->render(cherri);
-	pink->render(cherri);
-	blue->render(cherri);
-	orange->render(cherri);
+	red->render(cherri, red->scare, red->eaten);
+	pink->render(cherri, pink->scare, pink->eaten);
+	blue->render(cherri, blue->scare, blue->eaten);
+	orange->render(cherri, orange->scare, orange->eaten);
 	SDL_RenderPresent(renderer);
 
 }
