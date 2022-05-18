@@ -14,6 +14,8 @@ public:
     void update_map(int x, int y);
     bool moveable(int x, int y);
     bool turnable(int x, int y);
+    void get_safehouse(int& x, int& y);
+
     int cherri_left = 4;
     bool win();
 

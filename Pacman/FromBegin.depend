@@ -102,7 +102,7 @@
 	<iostream>
 	<cmath>
 
-1652756297 source:e:\code\gameproject\pacman\game.cpp
+1652846833 source:e:\code\gameproject\pacman\game.cpp
 	"game.h"
 	"load_image.h"
 	"player.h"
@@ -114,16 +114,16 @@
 1650608856 e:\code\gameproject\pacman\player.h
 	"game.h"
 
-1652753834 e:\code\gameproject\pacman\map.h
+1652845013 e:\code\gameproject\pacman\map.h
 	"game.h"
 	"load_image.h"
 	<fstream>
 
-1652756297 e:\code\gameproject\pacman\ghost.h
+1652847189 e:\code\gameproject\pacman\ghost.h
 	"game.h"
 	"load_image.h"
 
-1652756620 source:e:\code\gameproject\pacman\ghost.cpp
+1652847011 source:e:\code\gameproject\pacman\ghost.cpp
 	"ghost.h"
 	"map.h"
 	<cmath>
@@ -132,7 +132,7 @@
 1652753834 source:e:\code\gameproject\pacman\main.cpp
 	"game.h"
 
-1652753834 source:e:\code\gameproject\pacman\map.cpp
+1652845013 source:e:\code\gameproject\pacman\map.cpp
 	"map.h"
 
 1652149034 source:e:\code\gameproject\pacman\player.cpp

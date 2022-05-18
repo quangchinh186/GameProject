@@ -16,6 +16,7 @@ ghost* orange;
 SDL_Renderer* Game::renderer = nullptr;
 map* gamemap;
 const int fps = 60;
+int safe_house_x, safe_house_y;
 
 Game::Game()
 {}
@@ -49,7 +50,8 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 		orange = new ghost(1040, 640, 3);
 		gamemap = new map;
 		gamemap->create_map();
-
+		cherri = gamemap->cherri_left;
+		gamemap->get_safehouse(safe_house_x, safe_house_y);
 	}
 }
 
@@ -109,31 +111,70 @@ void Game::update()
 
     pacman->action(d);
 
-    red->chase(x, y, red->facing, red->eaten);
-    pink->chase(x_rand, y_rand, pink->facing, pink->eaten);
-    blue->chase(x_rand , x_rand, blue->facing, blue->eaten);
-    orange->chase(y_rand , y_rand, orange->facing, orange->eaten);
+    if(red->eaten){
+        red->chase(safe_house_x, safe_house_y, red->facing, red->scare);
+        if(red->got_to_safehouse(safe_house_x, safe_house_y)) red->eaten = false;
+    }else{
+        red->chase(x, y, red->facing, red->scare);
+    }
+
+    if(pink->eaten){
+        pink->chase(safe_house_x, safe_house_y, pink->facing, pink->scare);
+        if(pink->got_to_safehouse(safe_house_x, safe_house_y)) pink->eaten = false;
+    }else{
+        pink->chase(x_rand, y_rand, pink->facing, pink->scare);
+    }
+
+    if(blue->eaten){
+        blue->chase(safe_house_x , safe_house_y, blue->facing, blue->scare);
+        if(blue->got_to_safehouse(safe_house_x, safe_house_y)) blue->eaten = false;
+    }else{
+        blue->chase(x_rand , x_rand, blue->facing, blue->scare);
+    }
+
+    if(orange->eaten){
+        orange->chase(safe_house_x, safe_house_y, orange->facing, orange->scare);
+        if(orange->got_to_safehouse(safe_house_x, safe_house_y)) orange->eaten = false;
+    }else{
+        orange->chase(y_rand , y_rand, orange->facing, orange->scare);
+    }
+
     gamemap->update_map(x, y);
-    cherri = gamemap->cherri_left;
+
     if(red->meet(x, y, red->scare, red->eaten) || pink->meet(x, y, pink->scare, pink->eaten) || blue->meet(x, y, blue->scare, blue->eaten) || orange->meet(x, y, orange->scare, orange->eaten)){
         pacman->dead = true;
     }
 
-
-    //std::cout << red->xcoor << " " << red->ycoor << std::endl;
 }
+
+int timer = 0;
 
 void Game::render()
 {
 	SDL_RenderClear(renderer);
 	gamemap->loadmap();
 	pacman->render();
+	if(cherri != gamemap->cherri_left){
+        timer++;
+        red->scare = true;
+        pink->scare = true;
+        blue->scare = true;
+        orange->scare = true;
+        if(timer == 500){
+            cherri = gamemap->cherri_left;
+            timer = 0;
+            red->scare = false;
+            pink->scare = false;
+            blue->scare = false;
+            orange->scare = false;
+        }
+	}
 	red->render(cherri, red->scare, red->eaten);
 	pink->render(cherri, pink->scare, pink->eaten);
 	blue->render(cherri, blue->scare, blue->eaten);
 	orange->render(cherri, orange->scare, orange->eaten);
 	SDL_RenderPresent(renderer);
-
+    std::cout << timer << std::endl;
 }
 
 void Game::clean()

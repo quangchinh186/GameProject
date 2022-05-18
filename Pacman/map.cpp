@@ -88,4 +88,13 @@ void map::loadmap(){
     }
 }
 
-
+void map::get_safehouse(int& x, int& y){
+    for(int i = 0; i < 20; i++){
+        for(int j = 0; j < 30; j ++){
+            if(m[i][j] == 4){
+                x = destR.w * (j+1);
+                y = destR.h * (i+1);
+            }
+        }
+    }
+}

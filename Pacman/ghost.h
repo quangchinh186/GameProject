@@ -9,13 +9,13 @@ public:
     ghost(int x, int y, int _color);
     ~ghost();
     void render(int cherri, bool& sc, bool& ate);
-    void chase(int x, int y, int& face, bool ate);
+    void chase(int x, int y, int& face, bool sc);
 
     int xcoor, ycoor, source, facing = 0;
     int temp_face = 0;
     int ghost_v = 4;
     bool meet(int x, int y, bool& sc, bool& ate);
-    void go_to_safehouse();
+    bool got_to_safehouse(int x, int y);
     bool eaten;
     bool scare;
 
