@@ -24,30 +24,36 @@ void map::create_map(){
     file.close();
 }
 
-bool map::moveable(int x, int y){
+bool map::moveable(int x, int y, bool is_eaten_ghost){
     int j = x / destR.w, i = y / destR.h;
-    if(m[i][j] == 1 ){
+    if(m[i][j] == 4 && is_eaten_ghost){
+        return true;
+    }
+
+    if(m[i][j] == 1 || m[i][j] == 4){
         return false;
     }
     return true;
 }
 
 bool map::turnable(int x, int y){
-    if(x % destR.w == 0 and y % destR.h == 0){
+    if(x % destR.w == 0 and  y % destR.h == 0){
         return true;
     }
 
     return false;
 }
 
-void map::update_map(int x, int y){
+void map::update_map(int x, int y, int& score){
     if(x % 40 <= 20 and y % 40 <= 20){
         int j = x/40, i = y/40;
         if(m[i][j] == 2){
             m[i][j] = 0;
+            score+=10;
         }
         if(m[i][j] == 3){
             m[i][j] = 0;
+            score+=30;
             cherri_left--;
         }
     }
@@ -92,8 +98,8 @@ void map::get_safehouse(int& x, int& y){
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 30; j ++){
             if(m[i][j] == 4){
-                x = destR.w * (j+1);
-                y = destR.h * (i+1);
+                x = destR.w * j;
+                y = destR.h * i;
             }
         }
     }

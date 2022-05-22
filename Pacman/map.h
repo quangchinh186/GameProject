@@ -11,8 +11,8 @@ public:
     int m[20][30];
     void loadmap();
     void create_map();
-    void update_map(int x, int y);
-    bool moveable(int x, int y);
+    void update_map(int x, int y, int& score);
+    bool moveable(int x, int y, bool is_eaten_ghost);
     bool turnable(int x, int y);
     void get_safehouse(int& x, int& y);
 
