@@ -16,7 +16,8 @@ ghost* orange;
 
 SDL_Renderer* Game::renderer = nullptr;
 map* gamemap;
-pen p;
+pen* p;
+
 const int fps = 60;
 int safe_house_x, safe_house_y;
 
@@ -48,6 +49,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
     pink = new ghost(1120, 40, 1);
     blue = new ghost(120, 640, 2);
     orange = new ghost(1040, 640, 3);
+    p = new pen(30);
     gamemap = new map;
     gamemap->create_map();
     cherri = gamemap->cherri_left;
@@ -224,10 +226,10 @@ void Game::render()
 {
 	SDL_RenderClear(renderer);
 	gamemap->loadmap();
-    p.write("score: " + std::to_string(score) + "/" + std::to_string(high_score) , 1200, 650, {255, 255, 255, 255}, 30);
-    p.write("M to mute" , 1220, 0, {255, 255, 255, 255}, 30);
-    p.write("P to pause" , 1220, 50, {255, 255, 255, 255}, 30);
-    p.write("Esc to quit" , 1220, 100, {255, 255, 255, 255}, 30);
+    p->write("score: " + std::to_string(score) + "/" + std::to_string(high_score) , 1200, 650, {255, 255, 255, 255});
+    p->write("M to mute" , 1220, 0, {255, 255, 255, 255});
+    p->write("P to pause" , 1220, 50, {255, 255, 255, 255});
+    p->write("Esc to quit" , 1220, 100, {255, 255, 255, 255});
 
 	if(cherri != gamemap->cherri_left){
         scare_timer++;
@@ -263,7 +265,7 @@ void Game::render_all(){
         render_rect.h = 100; render_rect.w = 750;
         SDL_RenderCopy(renderer, win_screen, NULL, &render_rect);
         if(score == high_score){
-            p.write("__New High Score__", 400, 550,{255, 255, 255, 255}, 50);
+            p->write("__New High Score__", 500, 550,{255, 255, 255, 255});
         }
     }
 
@@ -282,7 +284,7 @@ void Game::render_all(){
         render_rect.h = 100; render_rect.w = 750;
         SDL_RenderCopy(renderer, lost_screen, NULL, &render_rect);
         if(score == high_score){
-            p.write("__New High Score__", 400, 550,{255, 255, 255, 255}, 50);
+            p->write("__New High Score__", 500, 550,{255, 255, 255, 255});
         }
     }
     SDL_RenderPresent(renderer);
@@ -296,11 +298,11 @@ void Game::play_sound(){
             Mix_HaltMusic();
             flag = red->scare;
         }
-        if(flag2 != pacman->dead){
+        if(flag2 != pacman->dead && pacman->dead){
             Mix_HaltMusic();
             Mix_PlayChannel(-1, die, 0);
-            flag2 = pacman->dead;
-            return;
+//            flag2 = pacman->dead;
+//            return;
         }
         flag2 = pacman->dead;
         if(is_pause || pacman->dead){

@@ -1,16 +1,16 @@
 #include "pen.h"
 
-pen::pen(){
-
+pen::pen(int size){
+    font = TTF_OpenFont("font.ttf", size);
 }
 
 pen::~pen(){
     TTF_CloseFont(font);
 }
 
-void pen::write(const std::string &msg, int x, int y, SDL_Color color, int size)
+void pen::write(const std::string &msg, int x, int y, SDL_Color color)
 {
-    font = TTF_OpenFont("font.ttf", size);
+
     SDL_Surface *surf;
     SDL_Texture *tex;
     SDL_Rect rect;

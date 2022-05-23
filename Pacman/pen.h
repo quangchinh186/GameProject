@@ -5,9 +5,9 @@
 class pen{
 
 public:
-    pen();
+    pen(int size);
     ~pen();
-    void write(const std::string &msg, int x, int y, SDL_Color color, int size);
+    void write(const std::string &msg, int x, int y, SDL_Color color);
 
 private:
     TTF_Font *font;

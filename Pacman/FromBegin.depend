@@ -40,7 +40,7 @@
 1649671300 source:f:\c-c++\frombegin\map.cpp
 	"map.h"
 
-1653298730 source:f:\gameproject\pacman\game.cpp
+1653299183 source:f:\gameproject\pacman\game.cpp
 	"game.h"
 	"load_image.h"
 	"player.h"
@@ -73,7 +73,7 @@
 1649219840 source:f:\gameproject\pacman\load_image.cpp
 	"load_image.h"
 
-1653297463 source:f:\gameproject\pacman\main.cpp
+1653298819 source:f:\gameproject\pacman\main.cpp
 	"game.h"
 	<fstream>
 
@@ -89,7 +89,7 @@
 	"game.h"
 	"load_image.h"
 
-1653293388 source:f:\gameproject\pacman\ghost.cpp
+1653298819 source:f:\gameproject\pacman\ghost.cpp
 	"ghost.h"
 	"map.h"
 	<cmath>
@@ -145,9 +145,9 @@
 	"load_image.h"
 	"map.h"
 
-1653233250 f:\gameproject\pacman\pen.h
+1653299080 f:\gameproject\pacman\pen.h
 	"game.h"
 
-1653290697 source:f:\gameproject\pacman\pen.cpp
+1653299080 source:f:\gameproject\pacman\pen.cpp
 	"pen.h"
 
