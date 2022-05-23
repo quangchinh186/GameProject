@@ -3,6 +3,7 @@
 #include "player.h"
 #include "map.h"
 #include "ghost.h"
+#include "pen.h"
 #include <cstdlib>
 #include <ctime>
 
@@ -15,8 +16,10 @@ ghost* orange;
 
 SDL_Renderer* Game::renderer = nullptr;
 map* gamemap;
+pen p;
 const int fps = 60;
 int safe_house_x, safe_house_y;
+
 
 Game::Game()
 {}
@@ -27,25 +30,19 @@ Game::~Game()
 void Game::init(const char* title, int width, int height, bool fullscreen)
 {
 	int flags = 0;
-
-	if (fullscreen)
-	{
+	if (fullscreen){
 		flags = SDL_WINDOW_FULLSCREEN;
 	}
-
-	if (SDL_Init(SDL_INIT_EVERYTHING | SDL_INIT_AUDIO ) == 0)
-	{
+	if (SDL_Init(SDL_INIT_EVERYTHING | SDL_INIT_AUDIO ) == 0){
 		window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags);
 		renderer = SDL_CreateRenderer(window, -1, 0);
 		Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 		TTF_Init();
-		waka = Mix_LoadWAV("wakawaka.wav");
-		if (renderer)
-		{
+		if (renderer){
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		}
 	}
-	isRunning = true;
+
     pacman = new player("image/pacman.png", 560, 480, 3);
     red = new ghost(40, 40, 0);
     pink = new ghost(1120, 40, 1);
@@ -55,6 +52,18 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
     gamemap->create_map();
     cherri = gamemap->cherri_left;
     gamemap->get_safehouse(safe_house_x, safe_house_y);
+
+    waka = Mix_LoadMUS("sound/waka.mp3");
+	power = Mix_LoadMUS("sound/scare.mp3");
+	die = Mix_LoadWAV("sound/dead.wav");
+    player_lives = Texture::NewTexture("image/1up.png");
+    win_screen = Texture::NewTexture("image/youwon.png");
+    pause_screen = Texture::NewTexture("image/pause.png");
+    retry_screen = Texture::NewTexture("image/retry.png");
+    lost_screen = Texture::NewTexture("image/gameover.png");
+
+
+    isRunning = true;
     is_pause = true;
 }
 
@@ -71,13 +80,16 @@ void Game::handleEvents()
         switch(e.key.keysym.sym){
             case SDLK_r:
             if(pacman->dead){
-                is_pause = true;
-                pacman->retry();
-                red->retry(red->spaw_x, red->spaw_y);
-                pink->retry(pink->spaw_x, pink->spaw_y);
-                blue->retry(blue->spaw_x, blue->spaw_y);
-                orange->retry(orange->spaw_x, orange->spaw_y);
                 lives--;
+                is_pause = true;
+                if(lives >= 0){
+                    pacman->retry();
+                    red->retry(red->spaw_x, red->spaw_y);
+                    pink->retry(pink->spaw_x, pink->spaw_y);
+                    blue->retry(blue->spaw_x, blue->spaw_y);
+                    orange->retry(orange->spaw_x, orange->spaw_y);
+                }
+
             }
             break;
 
@@ -101,6 +113,19 @@ void Game::handleEvents()
             d = 3;
             break;
 
+            case SDLK_m:
+            is_pause = false;
+            if(is_muted){
+                is_muted = false;
+            }else{
+                is_muted = true;
+            }
+            break;
+
+            case SDLK_ESCAPE:
+            isRunning = false;
+            break;
+
             case SDLK_p:
             if(!is_pause){
                 is_pause = true;
@@ -122,10 +147,6 @@ int change_frame = 0, speed = 5;
 
 void Game::update()
 {
-    if(gamemap->win()){
-        isRunning = false;
-        std::cout << "You Won !!!" << std::endl;
-    }
     if(lives == 0){
         isRunning = false;
     }
@@ -203,8 +224,10 @@ void Game::render()
 {
 	SDL_RenderClear(renderer);
 	gamemap->loadmap();
-    write("score: " + std::to_string(score) + "/" + std::to_string(high_score) , 1200, 650, {255, 255, 255, 255}, 30);
-    //write("P to pause" , 0, 0, {255, 255, 255, 255}, 30);
+    p.write("score: " + std::to_string(score) + "/" + std::to_string(high_score) , 1200, 650, {255, 255, 255, 255}, 30);
+    p.write("M to mute" , 1220, 0, {255, 255, 255, 255}, 30);
+    p.write("P to pause" , 1220, 50, {255, 255, 255, 255}, 30);
+    p.write("Esc to quit" , 1220, 100, {255, 255, 255, 255}, 30);
 
 	if(cherri != gamemap->cherri_left){
         scare_timer++;
@@ -226,35 +249,86 @@ void Game::render()
 	blue->render(cherri, blue->scare, blue->eaten);
 	orange->render(cherri, orange->scare, orange->eaten);
 	pacman->render();
-	SDL_RenderPresent(renderer);
-
 }
 
 void Game::render_all(){
+    render_rect.x = 1210; render_rect.y = 700;
+    render_rect.h = 40; render_rect.w = 40;
+    for(int i = 0; i < lives; i++){
+        SDL_RenderCopy(renderer, player_lives, NULL, &render_rect);
+        render_rect.x += render_rect.w + 10;
+    }
+    if(gamemap->win()){
+        render_rect.x = 230; render_rect.y = 300;
+        render_rect.h = 100; render_rect.w = 750;
+        SDL_RenderCopy(renderer, win_screen, NULL, &render_rect);
+        if(score == high_score){
+            p.write("__New High Score__", 400, 550,{255, 255, 255, 255}, 50);
+        }
+    }
 
-
+    if(is_pause and lives != 0 and !pacman->dead){
+        render_rect.x = 230; render_rect.y = 300;
+        render_rect.h = 100; render_rect.w = 750;
+        SDL_RenderCopy(renderer, pause_screen, NULL, &render_rect);
+    }
+    if(pacman->dead){
+        render_rect.x = 230; render_rect.y = 300;
+        render_rect.h = 100; render_rect.w = 750;
+        SDL_RenderCopy(renderer, retry_screen, NULL, &render_rect);
+    }
+    if(lives == 0){
+        render_rect.x = 200; render_rect.y = 300;
+        render_rect.h = 100; render_rect.w = 750;
+        SDL_RenderCopy(renderer, lost_screen, NULL, &render_rect);
+        if(score == high_score){
+            p.write("__New High Score__", 400, 550,{255, 255, 255, 255}, 50);
+        }
+    }
+    SDL_RenderPresent(renderer);
 }
 
-void Game::write(const std::string &msg, int x, int y, SDL_Color color, int size)
-{
-    TTF_Font *font = TTF_OpenFont("font.ttf", size);
-    SDL_Surface *surf;
-    SDL_Texture *tex;
-    SDL_Rect rect;
-    surf = TTF_RenderText_Solid(font, msg.c_str(), color);
-    tex = SDL_CreateTextureFromSurface(renderer, surf);
-    rect.x = x;
-    rect.y = y;
-    rect.w = surf->w;
-    rect.h = surf->h;
-    SDL_FreeSurface(surf);
-    SDL_RenderCopy(renderer, tex, NULL, &rect);
-    SDL_DestroyTexture(tex);
-    TTF_CloseFont(font);
+bool flag, flag2 = false;
+
+void Game::play_sound(){
+    if(!is_muted){
+        if(flag != red->scare){
+            Mix_HaltMusic();
+            flag = red->scare;
+        }
+        if(flag2 != pacman->dead){
+            Mix_HaltMusic();
+            Mix_PlayChannel(-1, die, 0);
+            flag2 = pacman->dead;
+            return;
+        }
+        flag2 = pacman->dead;
+        if(is_pause || pacman->dead){
+            Mix_HaltMusic();
+            return;
+        }
+
+        if(red->scare && !Mix_PlayingMusic()){
+            Mix_HaltMusic();
+            Mix_PlayMusic(power, 0);
+        }
+        if(!red->scare && !Mix_PlayingMusic()){
+            Mix_HaltMusic();
+            Mix_PlayMusic(waka, 0);
+        }
+
+    }
+    else{
+        Mix_HaltMusic();
+        return;
+    }
+
 }
 
 void Game::clean()
 {
+
+    Mix_CloseAudio();
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 }

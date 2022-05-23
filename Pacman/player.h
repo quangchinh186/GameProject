@@ -15,6 +15,8 @@ public:
     int xpos, ypos, frame;
     int spawn_x, spawn_y;
     bool dead = false;
+    bool is_power_up = false;
+
 private:
     SDL_Texture* dyingPlayer;
     SDL_Texture* playerTex;

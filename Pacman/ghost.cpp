@@ -39,6 +39,8 @@ double max_distance = 10000;
 
 
 void ghost::retry(int x, int y){
+    eaten = false;
+    scare = false;
     desR.x = x;
     desR.y = y;
 }
@@ -93,7 +95,7 @@ else{
             way_3 = sqrt(way_3);
         }else{way_3 = max_distance;}
 
-        way_2 < way_3 ? temp = 1  : temp = 3, way_2 = way_3;
+        way_2 <= way_3 ? temp = 1  : temp = 3, way_2 = way_3;
         way_1 < way_2 ? face = 0 : face = temp;
 
         break;
@@ -118,7 +120,7 @@ else{
             way_3 = sqrt(way_3);
         }else{way_3 = max_distance;}
 
-        way_2 < way_3 ? temp = 2  : temp = 0, way_2 = way_3;
+        way_2 <= way_3 ? temp = 2  : temp = 0, way_2 = way_3;
         way_1 < way_2 ? face = 1 : face = temp;
 
         break;
@@ -143,7 +145,7 @@ else{
             way_3 = sqrt(way_3);
         }else{way_3 = max_distance;}
 
-        way_2 < way_3 ? temp = 3  : temp = 1, way_2 = way_3;
+        way_2 <= way_3 ? temp = 3  : temp = 1, way_2 = way_3;
         way_1 < way_2 ? face = 2 : face = temp;
 
         break;
@@ -168,16 +170,13 @@ else{
             way_3 = sqrt(way_3);
         }else{way_3 = max_distance;}
 
-        way_2 < way_3 ? temp = 0  : temp = 2, way_2 = way_3;
+        way_2 <= way_3 ? temp = 0  : temp = 2, way_2 = way_3;
         way_1 < way_2 ? face = 3 : face = temp;
 
         break;
     }
     temp_face = face;
 }
-//else{
-//    face = temp_face;
-//}
 
     desR.x += x_s[face]*ghost_v;
     desR.y += y_s[face]*ghost_v;
@@ -208,7 +207,7 @@ bool ghost::meet(int x, int y, bool& sc, bool& ate, int& score){
 
 void ghost::revive(int x, int y){
     desR.x = x;
-    desR.y = y - desR.h*2;
+    desR.y = y - desR.h;
 }
 
 

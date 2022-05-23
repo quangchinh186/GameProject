@@ -16,13 +16,15 @@ public:
 	~Game();
 
 	void init(const char* title, int width, int height, bool fullscreen);
-    void write(const std::string &msg, int x, int y, SDL_Color color, int size);
+
 	void handleEvents();
 	void update();
 	bool running() { return isRunning; }
 	bool is_pause = false;
+	bool is_muted = false;
 	void render();
 	void render_all();
+	void play_sound();
 	void clean();
 
 	static SDL_Renderer *renderer;
@@ -36,7 +38,12 @@ private:
 	SDL_Texture* player_lives;
 	SDL_Texture* win_screen;
 	SDL_Texture* pause_screen;
-    Mix_Chunk* waka = nullptr;
+	SDL_Texture* retry_screen;
+	SDL_Texture* lost_screen;
+	SDL_Rect render_rect;
+    Mix_Music* waka;
+    Mix_Music* power;
+    Mix_Chunk* die;
 
 };
 

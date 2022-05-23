@@ -40,16 +40,17 @@
 1649671300 source:f:\c-c++\frombegin\map.cpp
 	"map.h"
 
-1653209887 source:f:\gameproject\pacman\game.cpp
+1653298730 source:f:\gameproject\pacman\game.cpp
 	"game.h"
 	"load_image.h"
 	"player.h"
 	"map.h"
 	"ghost.h"
+	"pen.h"
 	<cstdlib>
 	<ctime>
 
-1653232186 f:\gameproject\pacman\game.h
+1653296364 f:\gameproject\pacman\game.h
 	"SDL.h"
 	<SDL_image.h>
 	<SDL_mixer.h>
@@ -61,7 +62,7 @@
 1649219840 f:\gameproject\pacman\load_image.h
 	"game.h"
 
-1653124830 f:\gameproject\pacman\player.h
+1653289988 f:\gameproject\pacman\player.h
 	"game.h"
 
 1653026656 f:\gameproject\pacman\map.h
@@ -72,14 +73,14 @@
 1649219840 source:f:\gameproject\pacman\load_image.cpp
 	"load_image.h"
 
-1653213517 source:f:\gameproject\pacman\main.cpp
+1653297463 source:f:\gameproject\pacman\main.cpp
 	"game.h"
 	<fstream>
 
 1653026656 source:f:\gameproject\pacman\map.cpp
 	"map.h"
 
-1653148469 source:f:\gameproject\pacman\player.cpp
+1653289183 source:f:\gameproject\pacman\player.cpp
 	"player.h"
 	"load_image.h"
 	"map.h"
@@ -88,7 +89,7 @@
 	"game.h"
 	"load_image.h"
 
-1653136866 source:f:\gameproject\pacman\ghost.cpp
+1653293388 source:f:\gameproject\pacman\ghost.cpp
 	"ghost.h"
 	"map.h"
 	<cmath>
@@ -143,4 +144,10 @@
 	"player.h"
 	"load_image.h"
 	"map.h"
+
+1653233250 f:\gameproject\pacman\pen.h
+	"game.h"
+
+1653290697 source:f:\gameproject\pacman\pen.cpp
+	"pen.h"
 

@@ -69,7 +69,8 @@ void player::action(int direct){
         dR.y += v * y_step[sub];
         direct = sub;
     }
-
+    xpos = dR.x;
+    ypos = dR.y;
     sub = direct;
 }
 
