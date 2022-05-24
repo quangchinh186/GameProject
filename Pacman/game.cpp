@@ -149,6 +149,10 @@ int change_frame = 0, speed = 5;
 
 void Game::update()
 {
+    if(gamemap->win()){
+        is_pause = true;
+    }
+
     if(lives == 0){
         isRunning = false;
     }
@@ -226,10 +230,14 @@ void Game::render()
 {
 	SDL_RenderClear(renderer);
 	gamemap->loadmap();
-    p->write("score: " + std::to_string(score) + "/" + std::to_string(high_score) , 1200, 650, {255, 255, 255, 255});
-    p->write("M to mute" , 1220, 0, {255, 255, 255, 255});
-    p->write("P to pause" , 1220, 50, {255, 255, 255, 255});
-    p->write("Esc to quit" , 1220, 100, {255, 255, 255, 255});
+    p->write("score: " + std::to_string(score) , 1200, 600, {255, 255, 255, 255});
+    p->write("Best: " + std::to_string(high_score) , 1200, 650, {255, 255, 255, 255});
+    p->write("CONTROL:" , 1205, 0, {255, 255, 255, 255});
+    p->write("ASWD to move" , 1205, 50, {255, 255, 255, 255});
+    p->write("M to mute" , 1205, 100, {255, 255, 255, 255});
+    p->write("P to pause" , 1205, 150, {255, 255, 255, 255});
+    p->write("Esc to quit" , 1205, 200, {255, 255, 255, 255});
+
 
 	if(cherri != gamemap->cherri_left){
         scare_timer++;
@@ -301,8 +309,6 @@ void Game::play_sound(){
         if(flag2 != pacman->dead && pacman->dead){
             Mix_HaltMusic();
             Mix_PlayChannel(-1, die, 0);
-//            flag2 = pacman->dead;
-//            return;
         }
         flag2 = pacman->dead;
         if(is_pause || pacman->dead){

@@ -181,7 +181,6 @@ else{
     desR.x += x_s[face]*ghost_v;
     desR.y += y_s[face]*ghost_v;
 
-
 }
 
 bool ghost::got_to_safehouse(int x, int y){
@@ -192,7 +191,7 @@ bool ghost::got_to_safehouse(int x, int y){
 }
 
 bool ghost::meet(int x, int y, bool& sc, bool& ate, int& score){
-    if(abs(desR.x - x) <= desR.w/2 && abs(desR.y - y) <= desR.h/2){
+    if(abs(desR.x - x) <= desR.w/3 && abs(desR.y - y) <= desR.h/3){
         if(sc && !ate){
             score+=100;
         }

@@ -40,7 +40,7 @@
 1649671300 source:f:\c-c++\frombegin\map.cpp
 	"map.h"
 
-1653299183 source:f:\gameproject\pacman\game.cpp
+1653363659 source:f:\gameproject\pacman\game.cpp
 	"game.h"
 	"load_image.h"
 	"player.h"
@@ -89,7 +89,7 @@
 	"game.h"
 	"load_image.h"
 
-1653298819 source:f:\gameproject\pacman\ghost.cpp
+1653363302 source:f:\gameproject\pacman\ghost.cpp
 	"ghost.h"
 	"map.h"
 	<cmath>
